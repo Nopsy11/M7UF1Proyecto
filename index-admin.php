@@ -43,13 +43,13 @@
                     echo "<td>".$value[5]."</td>";
                     if ($value[6] == 1){
                         echo "<td>SI activo</td>";
-                        echo "<td>Desactivar</td>";
+                        echo "<td class='desactivado'> <a href='index-admin.php?desactivar=true&desactivarCodigoCurso=".$value[0]."' class='enlaces'> Desactivar </a> </td>";
                     }
                     else{
                         echo "<td>NO activo</td>";
-                        echo "<td>Activar</td>";
+                        echo "<td class='activo'> <a href='index-admin.php?activar=true&activarCodigoCurso=".$value[0]."' class='enlaces'> Activar </a> </td>";
                     }
-                    echo "<td>Modificar</td>";
+                    echo '<td class="modificar"> <a href="modificarCurso.php" class="enlaces"> Modificar </a> </td>';
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td style='border: black 3px solid; background-color: red;' colspan='9'></td>";
@@ -59,43 +59,38 @@
         
         echo "<br> <br>";
 
-        echo "<form action='index-admin.php' method='post'>";
-            echo "<table style='border: black 3px solid; text-align: center;'>";
+        echo "<table style='border: black 3px solid; text-align: center;'>";
+            echo "<tr>";
+                echo "<td>DNI</td>";
+                echo "<td>Nombre</td>";
+                echo "<td>Apellidos</td>";
+                echo "<td>Foto</td>";
+                echo "<td>Edad</td>";
+                echo "<td>Email</td>";
+                echo "<td>Rol</td>";
+                echo "<td></td>";
+                // echo "<td>Codigo curso</td>";
+                echo "<td colspan='2'>Acciones</td>";
+            echo "</tr>";
+            foreach (mostrarProfes() as $key => $values) {
                 echo "<tr>";
-                    echo "<td>DNI</td>";
-                    echo "<td>Nombre</td>";
-                    echo "<td>Apellidos</td>";
-                    echo "<td>Foto</td>";
-                    echo "<td>Edad</td>";
-                    echo "<td>Email</td>";
-                    echo "<td>Rol</td>";
+                    echo "<td>".$values[0]."</td>";
+                    echo "<td>".$values[1]."</td>";
+                    echo "<td>".$values[2]."</td>";
+                    echo "<td>".$values[4]."</td>";
+                    echo "<td>".$values[5]."</td>";
+                    echo "<td>".$values[6]."</td>";
+                    echo "<td>".$values[7]."</td>";
                     echo "<td></td>";
-                    // echo "<td>Codigo curso</td>";
-                    echo "<td colspan='2'>Acciones</td>";
+                    // echo "<td>".$values[8]."</td>";
+                    echo "<td class='modificar'>Modificar</td>";
+                    echo "<td> <a href='index-admin.php?modificar=true&dniEliminarProfe=".$values[0]."' class='enlaces'>Eliminar</a> </td>";
                 echo "</tr>";
-                foreach (mostrarProfes() as $key => $values){
-                    echo "<tr>";
-                        echo "<td>".$values[0]."</td>";
-                        echo "<td>".$values[1]."</td>";
-                        echo "<td>".$values[2]."</td>";
-                        echo "<td>".$values[4]."</td>";
-                        echo "<td>".$values[5]."</td>";
-                        echo "<td>".$values[6]."</td>";
-                        echo "<td>".$values[7]."</td>";
-                        echo "<td></td>";
-                        // echo "<td>".$values[8]."</td>";
-                        echo "<td>Modificar</td>";
-                        echo "<td> <input type='submit' name='eliminarProfe' value='Eliminar'".$dniEliminarProfe = $values[0]."> </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td style='border: black 3px solid; background-color: blue;' colspan='11'></td>";
-                    echo "</tr>";
-                    if (isset($_POST['eliminarProfe'])) {
-                        eliminarProfe($dniEliminarProfe);
-                    }
-                }
+                echo "<tr>";
+                    echo "<td style='border: black 3px solid; background-color: blue;' colspan='11'></td>";
+                echo "</tr>";
+            }
             echo "</table>";
-        echo "</form>";
 
 
         /* crear curso */
@@ -106,6 +101,7 @@
             $_SESSION['fecha_fin'] = $_POST['fecha_fin'];
             $_SESSION['horas'] = $_POST['horas'];
             crearCurso();
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
         }
 
         /* crear profe */
@@ -117,6 +113,36 @@
             $_SESSION['emailProfe'] = $_POST['emailProfe'];
             $_SESSION['rolProfe'] = $_POST['rolProfe'];
             añadirProfe();
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+        }
+
+        /* eliminar profe */
+        if (isset ($_GET['eliminar']) && isset($_GET['dniEliminarProfe'])){
+            if ($_GET['eliminar']){
+                eliminarProfe($_GET['dniEliminarProfe']);
+                echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+            }
+        }
+
+        /* desactivar curso */
+        if (isset ($_GET['desactivar']) && isset($_GET['desactivarCodigoCurso'])){
+            if ($_GET['desactivar']){
+                desactivarCurso($_GET['desactivarCodigoCurso']);
+                echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+            }
+        }
+
+        /* activar curso */
+        if (isset ($_GET['activar']) && isset($_GET['activarCodigoCurso'])){
+            if ($_GET['activar']){
+                activarCurso($_GET['activarCodigoCurso']);
+                echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+            }
+        }
+
+        /* modificar curso RECARGAR PAGINA */
+        if (isset ($_GET['modificarCurso'])) {
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
         }
         ?>
         <?php

@@ -9,6 +9,7 @@
         <?php
         include ("funciones.php");
 
+        /* al enviar el formulario comprueba si el DNI y la CONTRASEÑA son correctos en la bbdd */
         if (isset($_POST['submit'])){
             if ($datos = iniciarSesion($_POST['dni'], $_POST['contra'])){
                 $_SESSION['dni'] = $datos['dni'];
@@ -20,6 +21,12 @@
                 $_SESSION['email'] = $datos['email'];
                 $_SESSION['rol'] = $datos['rol'];
                 echo "<meta http-equiv='refresh' content='0;url=index-".$_SESSION['rol'].".php'>";
+            }
+            /* mensaje de ERROR si el usuario o la contraseña no son correctos */
+            else {
+                echo "<h1>Usuario o contraseña ERRONEO</h1>";
+                echo "<h2>Estas seguro de que tu usuario existe?</h2>";
+                echo "<meta http-equiv='refresh' content='4;url=login.php'>";
             }
         }
         ?>

@@ -16,7 +16,7 @@ function iniciarSesion($dni, $contra) {
 }
 
 function crearCurso() {
-    mysqli_query (conexion(), "INSERT INTO cursos (nombre, descripcion, horas, fecha_inicio, fecha_fin) VALUES ('".$_SESSION['nombreCurso']."', '".$_SESSION['descripcion']."', '".$_SESSION['horas']."', '".$_SESSION['fecha_inicio']."', '".$_SESSION['fecha_fin']."')");
+    mysqli_query (conexion(), "INSERT INTO cursos (nombre, descripcion, horas, fecha_inicio, fecha_fin, activo) VALUES ('".$_SESSION['nombreCurso']."', '".$_SESSION['descripcion']."', '".$_SESSION['horas']."', '".$_SESSION['fecha_inicio']."', '".$_SESSION['fecha_fin']."', '1')");
 }
 
 function añadirProfe() {
@@ -35,6 +35,30 @@ function eliminarProfe($dniEliminarProfe) {
     $resultado = mysqli_query (conexion(), "DELETE FROM usuarios WHERE dni = '".$dniEliminarProfe."'");
     return ($resultado);
 }
+
+function activarCurso($codigoCurso) {
+    $resultado = mysqli_query (conexion(), "UPDATE cursos SET activo=1 WHERE codigo = '".$codigoCurso."'");
+    return ($resultado);
+}
+
+function desactivarCurso($codigoCurso) {
+    $resultado = mysqli_query (conexion(), "UPDATE cursos SET activo=0 WHERE codigo = '".$codigoCurso."'");
+    return ($resultado);
+}
+
+function mostrarCursosDisponibles() {
+    return mysqli_fetch_all (mysqli_query (conexion(), "SELECT * FROM cursos WHERE activo = 1"));
+}
+
+function mostrarCursosApuntados($dni) {
+    return mysqli_fetch_all (mysqli_query (conexion(), "SELECT * FROM cursos INNER JOIN usuarios ON cursos.codigo = usuarios.codigoCurso WHERE cursos.activo = 1 AND usuarios.dni = '".$dni."'"));
+}
+
+// modificarCurso() {
+    // $resultado = mysqli_query (conexion(), "UPDATE cursos SET nombre='".$_SESSION['modificarNombreCurso']."' WHERE codigo=1");
+    // return ($resultado);
+    // mysqli_query (conexion(), "UPDATE cursos SET nombre='".$_SESSION['modificarCursoNombre']."', descripcion = '".$_SESSION['modificarCursoDescripcion']."' WHERE codigo LIKE '".$_SESSION['']."'");
+// }
 
 // modificarUsuario() PONER LA FOTO!!!
 ?>

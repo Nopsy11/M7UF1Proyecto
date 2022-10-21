@@ -18,6 +18,31 @@
         </header>
         <h1>Vista profe</h1>
         <?php
+        echo "<table style='border: black 3px solid; text-align: center;'>";
+            echo "<tr>";
+                echo "<td>Codigo curso</td>";
+                echo "<td>Nombre</td>";
+                echo "<td>Descripcion</td>";
+                echo "<td>Horas</td>";
+                echo "<td>Fecha inicio</td>";
+                echo "<td>Fecha fin</td>";
+            echo "</tr>";
+            foreach (mostrarCursosApuntados($_SESSION['dni']) as $key => $value){
+                echo "<tr>";
+                    echo "<td>".$value[0]."</td>";
+                    echo "<td>".$value[1]."</td>";
+                    echo "<td>".$value[2]."</td>";
+                    echo "<td>".$value[3]."</td>";
+                    echo "<td>".$value[4]."</td>";
+                    echo "<td>".$value[5]."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td style='border: black 3px solid; background-color: red;' colspan='9'></td>";
+                echo "</tr>";
+            }
+        echo "</table>";
+        ?>
+        <?php
         }
         else {
             echo "<meta http-equiv='refresh' content='0;url=login.php'>";

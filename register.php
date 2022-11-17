@@ -11,7 +11,7 @@
         </header>
         <!-- formulario de registro de un nuevo usuario en la plataforma, o profesor o alumno -->
         <h1>Registrate</h1>
-        <form action="index.php" method="post" name="formularioRegister">
+        <form action="index.php" method="post" enctype="multipart/form-data" name="formularioRegister">
             <table style="border: black 3px solid">
                 <tr>
                     <td>DNI:</td>
@@ -39,12 +39,12 @@
                         <input type="email" id="email" name="email" required>
                     </td>
                 </tr>
-                <!-- <tr>
+                <tr>
                     <td>Foto de perfil</td>
                     <td>
-                        <input name="imagen" type="file">
+                        <input id="imagen" name="imagen" type="file">
                     </td>
-                </tr> -->
+                </tr>
                 <tr>
                     <td>
                         <input type="radio" id="profe" name="rol" value="profe" required>

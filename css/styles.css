@@ -10,3 +10,15 @@
 header{
     background-color: azure;
 }
+
+.modificar {
+    background-color: aquamarine;
+}
+
+.activo {
+    background-color: lightgreen;
+}
+
+.desactivado {
+    background-color: rgb(210, 47, 47);
+}

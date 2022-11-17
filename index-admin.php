@@ -34,68 +34,67 @@
                 echo "<td colspan='2'>Acciones</td>";
             echo "</tr>";
             foreach (mostrarCursos() as $key => $value){
-                echo "<tr>";
-                    echo "<td>".$value[0]."</td>";
-                    echo "<td>".$value[1]."</td>";
-                    echo "<td>".$value[2]."</td>";
-                    echo "<td>".$value[3]."</td>";
-                    echo "<td>".$value[4]."</td>";
-                    echo "<td>".$value[5]."</td>";
-                    if ($value[6] == 1){
-                        echo "<td>SI activo</td>";
-                        echo "<td>Desactivar</td>";
-                    }
-                    else{
-                        echo "<td>NO activo</td>";
-                        echo "<td>Activar</td>";
-                    }
-                    echo "<td>Modificar</td>";
-                echo "</tr>";
-                echo "<tr>";
-                    echo "<td style='border: black 3px solid; background-color: red;' colspan='9'></td>";
-                echo "</tr>";
+                if($value[0] != 1){
+                    echo "<tr>";
+                        echo "<td>".$value[0]."</td>";
+                        echo "<td>".$value[1]."</td>";
+                        echo "<td>".$value[2]."</td>";
+                        echo "<td>".$value[3]."</td>";
+                        echo "<td>".$value[4]."</td>";
+                        echo "<td>".$value[5]."</td>";
+                        if ($value[6] == 1){
+                            echo "<td>SI activo</td>";
+                            echo "<td class='desactivado'> <a href='index-admin.php?desactivar=true&desactivarCodigoCurso=".$value[0]."' class='enlaces'> Desactivar </a> </td>";
+                        }
+                        else{
+                            echo "<td>NO activo</td>";
+                            echo "<td class='activo'> <a href='index-admin.php?activar=true&activarCodigoCurso=".$value[0]."' class='enlaces'> Activar </a> </td>";
+                        }
+                        echo "<td class='modificar'> <a href='index-admin.php?modificarCurso=true&idModificarCurso=".$value[0]."' class='enlaces'> Modificar </a></td>";
+                        // echo "<td class='modificar'> <a href='modificarCurso.php' class='enlaces'> Modificar </a> </td>";
+                    echo "</tr>";
+                    echo "<tr>";
+                        echo "<td style='border: black 3px solid; background-color: red;' colspan='9'></td>";
+                    echo "</tr>";
+                }
             }
         echo "</table>";
         
         echo "<br> <br>";
 
-        echo "<form action='index-admin.php' method='post'>";
-            echo "<table style='border: black 3px solid; text-align: center;'>";
+        echo "<table style='border: black 3px solid; text-align: center;'>";
+            echo "<tr>";
+                echo "<td>DNI</td>";
+                echo "<td>Nombre</td>";
+                echo "<td>Apellidos</td>";
+                echo "<td>Foto</td>";
+                echo "<td>Edad</td>";
+                echo "<td>Email</td>";
+                echo "<td>Rol</td>";
+                echo "<td></td>";
+                // echo "<td>Codigo curso</td>";
+                echo "<td colspan='2'>Acciones</td>";
+            echo "</tr>";
+            foreach (mostrarProfes() as $key => $values) {
                 echo "<tr>";
-                    echo "<td>DNI</td>";
-                    echo "<td>Nombre</td>";
-                    echo "<td>Apellidos</td>";
-                    echo "<td>Foto</td>";
-                    echo "<td>Edad</td>";
-                    echo "<td>Email</td>";
-                    echo "<td>Rol</td>";
+                    echo "<td>".$values[0]."</td>";
+                    echo "<td>".$values[1]."</td>";
+                    echo "<td>".$values[2]."</td>";
+                    echo "<td>".$values[4]."</td>";
+                    echo "<td>".$values[5]."</td>";
+                    echo "<td>".$values[6]."</td>";
+                    echo "<td>".$values[7]."</td>";
                     echo "<td></td>";
-                    // echo "<td>Codigo curso</td>";
-                    echo "<td colspan='2'>Acciones</td>";
+                    // echo "<td>".$values[8]."</td>";
+                    echo "<td class = 'modificar'> <a href='index-admin.php?modificarProfe=true&dniModificarProfe=".$values[0]."' class='enlaces'>Modificar</td>";
+
+                    echo "<td> <a href='index-admin.php?eliminar=true&dniEliminarProfe=".$values[0]."' class='enlaces'>Eliminar</a> </td>";
                 echo "</tr>";
-                foreach (mostrarProfes() as $key => $values){
-                    echo "<tr>";
-                        echo "<td>".$values[0]."</td>";
-                        echo "<td>".$values[1]."</td>";
-                        echo "<td>".$values[2]."</td>";
-                        echo "<td>".$values[4]."</td>";
-                        echo "<td>".$values[5]."</td>";
-                        echo "<td>".$values[6]."</td>";
-                        echo "<td>".$values[7]."</td>";
-                        echo "<td></td>";
-                        // echo "<td>".$values[8]."</td>";
-                        echo "<td>Modificar</td>";
-                        echo "<td> <input type='submit' name='eliminarProfe' value='Eliminar'".$dniEliminarProfe = $values[0]."> </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td style='border: black 3px solid; background-color: blue;' colspan='11'></td>";
-                    echo "</tr>";
-                    if (isset($_POST['eliminarProfe'])) {
-                        eliminarProfe($dniEliminarProfe);
-                    }
-                }
+                echo "<tr>";
+                    echo "<td style='border: black 3px solid; background-color: blue;' colspan='11'></td>";
+                echo "</tr>";
+            }
             echo "</table>";
-        echo "</form>";
 
 
         /* crear curso */
@@ -106,6 +105,7 @@
             $_SESSION['fecha_fin'] = $_POST['fecha_fin'];
             $_SESSION['horas'] = $_POST['horas'];
             crearCurso();
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
         }
 
         /* crear profe */
@@ -117,7 +117,66 @@
             $_SESSION['emailProfe'] = $_POST['emailProfe'];
             $_SESSION['rolProfe'] = $_POST['rolProfe'];
             añadirProfe();
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
         }
+
+        /* eliminar profe */
+        if (isset ($_GET['eliminar']) && isset($_GET['dniEliminarProfe'])){
+            if ($_GET['eliminar']){
+                eliminarProfe($_GET['dniEliminarProfe']);
+                echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+            }
+        }
+
+        /* desactivar curso */
+        if (isset ($_GET['desactivar']) && isset($_GET['desactivarCodigoCurso'])){
+            if ($_GET['desactivar']){
+                desactivarCurso($_GET['desactivarCodigoCurso']);
+                echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+            }
+        }
+
+        /* activar curso */
+        if (isset ($_GET['activar']) && isset($_GET['activarCodigoCurso'])){
+            if ($_GET['activar']){
+                activarCurso($_GET['activarCodigoCurso']);
+                echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+            }
+        }
+
+        /* modificar curso */
+        if (isset ($_GET['modificarCurso']) && isset($_GET['idModificarCurso'])) {
+            $_SESSION['idCurso'] = $_GET['idModificarCurso'];
+            echo "<meta http-equiv='refresh' content='0;url=modificarCurso.php'>";
+        }
+
+        if (isset($_POST['modificarCurso'])){
+            $_SESSION['modificarNombreCurso'] = $_POST['modificarNombreCurso'];
+            $_SESSION['modificarDescripcion'] = $_POST['modificarDescripcion'];
+            $_SESSION['modificarFecha_inicio'] = $_POST['modificarFecha_inicio'];
+            $_SESSION['modificarFecha_fin'] = $_POST['modificarFecha_fin'];
+            $_SESSION['modificarHoras'] = $_POST['modificarHoras'];
+            modificarCurso();
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+        }
+
+
+        /* modificar profesor */
+        if (isset ($_GET['modificarProfe']) && isset($_GET['dniModificarProfe'])){
+            $_SESSION['dniModificarProfe'] = $_GET['dniModificarProfe'];
+            echo "<meta http-equiv='refresh' content='0;url=modificarProfe.php'>";
+        }
+
+        if (isset($_POST['modificarProfe'])){
+            $_SESSION['modificarNombreProfe'] = $_POST['modificarNombreProfe'];
+            $_SESSION['modificarApellidos'] = $_POST['modificarApellidos'];
+            $_SESSION['modificarEdad'] = $_POST['modificarEdad'];
+            $_SESSION['modificarFoto'] = $_POST['modificarFoto'];
+            $_SESSION['modificarEmail'] = $_POST['modificarEmail'];
+            modificarProfe();
+            echo "<meta http-equiv='refresh' content='0;url=index-admin.php'>";
+        }
+
         ?>
         <?php
         }
